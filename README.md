@@ -31,9 +31,10 @@ We use [Semantic Versioning](http://semver.org/) for versioning. For the version
 
 ## References
 
-- [Cortex XDR API](https://docs.paloaltonetworks.com/cortex/cortex-xdr/cortex-xdr-api.html) - Official Cortex XDR API documentation
-- [Cortex XDR Run scripts on an endpoint](https://docs-cortex.paloaltonetworks.com/r/Cortex-XDR/Cortex-XDR-Documentation/Run-scripts-on-an-endpoint) - Official Cortex XDR Run scripts on an endpoint documentation
-- [Python Requests](https://docs.python-requests.org/en/master/) - Official Python Requests documentation
+- [Cortex XDR | API](https://docs.paloaltonetworks.com/cortex/cortex-xdr/cortex-xdr-api.html) - Official Cortex XDR API documentation
+- [Cortex XDR | Run scripts on an endpoint](https://docs-cortex.paloaltonetworks.com/r/Cortex-XDR/Cortex-XDR-Documentation/Run-scripts-on-an-endpoint) - Official Cortex XDR Run scripts on an endpoint documentation
+- [Rapid7 | Insight Agent](https://docs.rapid7.com/insight-agent/) - Rapid7 Insight Agent documentation
+- [Python | Requests](https://docs.python-requests.org/en/master/) - Official Python Requests documentation
 
 ## Authors
 
