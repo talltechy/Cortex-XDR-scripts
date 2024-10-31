@@ -6,6 +6,6 @@
 version: 2
 updates:
   - package-ecosystem: "pip" # For Python
-    directory: "/python" # Location of Python package manifests (e.g., requirements.txt)
+    directory: "/" # Location of Python package manifests (e.g., requirements.txt)
     schedule:
       interval: "weekly"
