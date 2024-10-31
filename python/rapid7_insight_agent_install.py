@@ -42,19 +42,24 @@ def main():
     args = parser.parse_args()
 
     # Get values from environment variables if not provided via command-line arguments
-    url = args.url or env_vars.get("RAPID7_URL")
-    target_directory = args.target_directory or env_vars.get("RAPID7_TARGET_DIRECTORY")
+    url = args.url or env_vars.get("RAPID7_MSI_URL")
+    target_directory = args.target_directory or env_vars.get("RAPID7_TARGET_DIRECTORY") or "C:\\TEMP"
     token = args.token or env_vars.get("RAPID7_TOKEN")
 
     # Validate that all required values are provided
-    if not url or not target_directory or not token:
-        print("Error: Missing required arguments. Ensure URL, target directory, and token are provided.", file=sys.stderr)
+    if not url or not token:
+        print("Error: Missing required arguments. Ensure URL and token are provided.", file=sys.stderr)
         sys.exit(1)
 
     # Validate and normalize the target directory
     target_directory = os.path.abspath(target_directory)
     if not os.path.isdir(target_directory):
         print(f"Error: The target directory '{target_directory}' does not exist.", file=sys.stderr)
+        sys.exit(1)
+
+    # Ensure the target directory is writable
+    if not os.access(target_directory, os.W_OK):
+        print(f"Error: The target directory '{target_directory}' is not writable.", file=sys.stderr)
         sys.exit(1)
 
     msi_path = os.path.join(target_directory, "agentInstaller.msi")
