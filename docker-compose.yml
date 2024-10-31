@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  cortexxdrscripts:
+    image: cortexxdrscripts
+    build:
+      context: .
+      dockerfile: ./Dockerfile
