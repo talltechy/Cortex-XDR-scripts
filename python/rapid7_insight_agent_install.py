@@ -1,11 +1,11 @@
 import argparse
-import requests
 import os
 import subprocess
 import sys
+import requests
 
 def download_file(url, target_path):
-    response = requests.get(url, stream=True)
+    response = requests.get(url, stream=True, timeout=60)
     response.raise_for_status()
     with open(target_path, 'wb') as file:
         for chunk in response.iter_content(chunk_size=8192):
@@ -25,7 +25,7 @@ def load_env_file(file_path):
     if not os.path.exists(file_path):
         return {}
     env_vars = {}
-    with open(file_path) as f:
+    with open(file_path, encoding='utf-8') as f:
         for line in f:
             if line.strip() and not line.startswith('#'):
                 key, value = line.strip().split('=', 1)
@@ -72,7 +72,7 @@ def main():
         print("Installing MSI installer...")
         install_msi(msi_path, target_directory, token)
         print("Installation complete.")
-    except Exception as e:
+    except (requests.RequestException, subprocess.CalledProcessError, OSError) as e:
         print(f"An error occurred: {e}", file=sys.stderr)
         sys.exit(1)
 
