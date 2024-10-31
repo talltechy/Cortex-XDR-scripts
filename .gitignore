@@ -107,12 +107,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# Docker
-**/.dockerignore
-**/Dockerfile*
-**/docker-compose*
-**/compose*
-
 # Node
 node_modules/
 npm-debug.log
