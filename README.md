@@ -6,9 +6,15 @@ This repository contains a collection of scripts designed for use with Palo Alto
 
 Ensure any python scripts are created using Python 3.7 per Cortex XDR documentation. For a detailed list of supported modules, see the [Prerequisites](PREREQUISITES.md) file.
 
-## Deployment
+## Scripts
 
-To deploy these scripts on a live system, follow the instructions provided in the deployment guide.
+### PowerShell
+
+- TBD
+
+### Python
+
+- [Rapid7 Insight Agent - Install](python/rapid7/rapid7_insight_agent_install.md)
 
 ## Built With
 

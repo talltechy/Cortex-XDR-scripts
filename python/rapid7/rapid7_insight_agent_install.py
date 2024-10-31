@@ -21,38 +21,33 @@ def install_msi(msi_path, target_directory, token):
     ]
     subprocess.run(command, check=True)
 
-def load_env_file(file_path):
-    if not os.path.exists(file_path):
-        return {}
-    env_vars = {}
-    with open(file_path, encoding='utf-8') as f:
-        for line in f:
-            if line.strip() and not line.startswith('#'):
-                key, value = line.strip().split('=', 1)
-                env_vars[key] = value
-    return env_vars
-
 def main():
-    env_vars = load_env_file('.env')
+    """
+    Main function to download and install the Rapid7 Insight Agent.
 
+    This function performs the following steps:
+    1. Parses command-line arguments for URL, target directory, and token.
+    2. Validates that the required URL and token are provided.
+    3. Validates and normalizes the target directory.
+    4. Ensures the target directory is writable.
+    5. Downloads the MSI installer to the target directory.
+    6. Installs the MSI installer using the provided token.
+
+    If any required arguments are missing or if any errors occur during the
+    download or installation process, the function will print an error message
+    to stderr and exit with a non-zero status code.
+    """
     parser = argparse.ArgumentParser(description="Download and install Rapid7 Insight Agent.")
-    parser.add_argument("--url", help="URL to download the MSI installer")
-    parser.add_argument("--target_directory", help="Target directory for dependencies")
-    parser.add_argument("--token", help="Custom token for installation")
+    parser.add_argument("--url", required=True, help="URL to download the MSI installer")
+    parser.add_argument("--target_directory", required=True, help="Target directory for dependencies")
+    parser.add_argument("--token", required=True, help="Custom token for installation")
     args = parser.parse_args()
 
-    # Get values from environment variables if not provided via command-line arguments
-    url = args.url or env_vars.get("RAPID7_MSI_URL")
-    target_directory = args.target_directory or env_vars.get("RAPID7_TARGET_DIRECTORY") or "C:\\TEMP"
-    token = args.token or env_vars.get("RAPID7_TOKEN")
-
-    # Validate that all required values are provided
-    if not url or not token:
-        print("Error: Missing required arguments. Ensure URL and token are provided.", file=sys.stderr)
-        sys.exit(1)
+    url = args.url
+    target_directory = os.path.abspath(args.target_directory)
+    token = args.token
 
     # Validate and normalize the target directory
-    target_directory = os.path.abspath(target_directory)
     if not os.path.isdir(target_directory):
         print(f"Error: The target directory '{target_directory}' does not exist.", file=sys.stderr)
         sys.exit(1)
