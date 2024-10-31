@@ -46,13 +46,10 @@ def main():
     target_directory = args.target_directory or env_vars.get("RAPID7_TARGET_DIRECTORY")
     token = args.token or env_vars.get("RAPID7_TOKEN")
 
-    # Prompt user for input if values are still not provided
-    if not url:
-        url = input("Please enter the URL to download the MSI installer: ")
-    if not target_directory:
-        target_directory = input("Please enter the target directory for dependencies: ")
-    if not token:
-        token = input("Please enter the custom token for installation: ")
+    # Validate that all required values are provided
+    if not url or not target_directory or not token:
+        print("Error: Missing required arguments. Ensure URL, target directory, and token are provided.", file=sys.stderr)
+        sys.exit(1)
 
     # Validate and normalize the target directory
     target_directory = os.path.abspath(target_directory)
