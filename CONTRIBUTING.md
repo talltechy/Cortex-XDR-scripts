@@ -56,4 +56,8 @@ Project maintainers who do not follow or enforce the Code of Conduct in good fai
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE.md) - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1) - see the [LICENSE.md](LICENSE.md) file for details.
+
+![CC](https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1)
+![BY](https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1)
+![SA](https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1)
