@@ -43,9 +43,9 @@ import argparse
 import os
 import subprocess
 import sys
-import requests
 import logging
 import re
+import requests
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -69,10 +69,10 @@ def download_file(url, target_path):
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
     except requests.exceptions.RequestException as e:
-        logging.error(f"Failed to download file: {e}")
+        logging.error("Failed to download file: %s", e)
         raise
     except IOError as e:
-        logging.error(f"Failed to write file to {target_path}: {e}")
+        logging.error("Failed to write file to %s: %s", target_path, e)
         raise
 
 def install_msi(msi_path, target_directory, token):
@@ -97,7 +97,7 @@ def install_msi(msi_path, target_directory, token):
     try:
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
-        logging.error(f"MSI installation failed: {e}")
+        logging.error("MSI installation failed: %s", e)
         raise
 
 def main():
@@ -145,12 +145,12 @@ def main():
 
     # Validate and normalize the target directory
     if not os.path.isdir(target_directory):
-        logging.error(f"The target directory '{target_directory}' does not exist.")
+        logging.error("The target directory '%s' does not exist.", target_directory)
         sys.exit(1)
 
     # Ensure the target directory is writable
     if not os.access(target_directory, os.W_OK):
-        logging.error(f"The target directory '{target_directory}' is not writable.")
+        logging.error("The target directory '%s' is not writable.", target_directory)
         sys.exit(1)
 
     msi_path = os.path.join(target_directory, "agentInstaller.msi")
@@ -164,7 +164,7 @@ def main():
         install_msi(msi_path, target_directory, token)
         logging.info("Installation complete.")
     except (requests.RequestException, subprocess.CalledProcessError, OSError) as e:
-        logging.error(f"An error occurred: {e}")
+        logging.error("An error occurred: %s", e)
         sys.exit(1)
 
 if __name__ == "__main__":
