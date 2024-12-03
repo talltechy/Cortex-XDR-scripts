@@ -1,3 +1,44 @@
+"""
+Rapid7 Insight Agent Installer Script
+
+This script automates the process of downloading and installing the Rapid7 Insight Agent.
+It performs the following steps:
+1. Parses command-line arguments for URL, target directory, and token.
+2. Validates that the required URL and token are provided.
+3. Validates and normalizes the target directory.
+4. Ensures the target directory is writable.
+5. Downloads the MSI installer to the target directory.
+6. Installs the MSI installer using the provided token.
+
+Usage:
+    python rapid7_insight_agent_install.py --url <MSI_URL> --target_directory <TARGET_DIR> --token <TOKEN>
+
+Arguments:
+    --url: URL to download the MSI installer.
+    --target_directory: Target directory for dependencies.
+    --token: Custom token for installation.
+
+Example:
+    python rapid7_insight_agent_install.py --url https://example.com/installer.msi --target_directory C:/path/to/dir --token your_token
+
+Dependencies:
+    - requests: To download the MSI installer.
+    - subprocess: To run the msiexec command for installation.
+    - argparse: To parse command-line arguments.
+    - os: To handle file and directory operations.
+    - sys: To handle system-specific parameters and functions.
+
+Raises:
+    requests.exceptions.RequestException: If there is an issue with the HTTP request.
+    IOError: If there is an issue writing the file to the target path.
+    subprocess.CalledProcessError: If the msiexec command fails.
+
+Author:
+    Matt Wyen
+    https://github.com/talltechy
+    matt@wyen.me
+"""
+
 import argparse
 import os
 import subprocess
