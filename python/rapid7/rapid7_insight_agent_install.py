@@ -44,6 +44,11 @@ import os
 import subprocess
 import sys
 import requests
+import logging
+import re
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def download_file(url, target_path):
     """
@@ -57,11 +62,18 @@ def download_file(url, target_path):
         requests.exceptions.RequestException: If there is an issue with the HTTP request.
         IOError: If there is an issue writing the file to the target path.
     """
-    response = requests.get(url, stream=True, timeout=60)
-    response.raise_for_status()
-    with open(target_path, 'wb') as file:
-        for chunk in response.iter_content(chunk_size=8192):
-            file.write(chunk)
+    try:
+        response = requests.get(url, stream=True, timeout=30)  # Reduced timeout to 30 seconds
+        response.raise_for_status()
+        with open(target_path, 'wb') as file:
+            for chunk in response.iter_content(chunk_size=8192):
+                file.write(chunk)
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to download file: {e}")
+        raise
+    except IOError as e:
+        logging.error(f"Failed to write file to {target_path}: {e}")
+        raise
 
 def install_msi(msi_path, target_directory, token):
     """
@@ -82,7 +94,11 @@ def install_msi(msi_path, target_directory, token):
         f"CUSTOMTOKEN={token}",
         "/quiet"
     ]
-    subprocess.run(command, check=True)
+    try:
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as e:
+        logging.error(f"MSI installation failed: {e}")
+        raise
 
 def main():
     """
@@ -110,28 +126,45 @@ def main():
     target_directory = os.path.abspath(args.target_directory)
     token = args.token
 
+    # Validate URL format
+    if not url.startswith("http://") and not url.startswith("https://"):
+        logging.error("Invalid URL format. URL must start with 'http://' or 'https://'.")
+        sys.exit(1)
+
+    # Validate token length (example: token should be at least 10 characters)
+    if len(token) < 10:
+        logging.error("Invalid token. Token must be at least 10 characters long.")
+        sys.exit(1)
+
+    token_pattern = re.compile(r"^[a-z]{2}:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+
+    # Validate token format
+    if not token_pattern.match(token):
+        logging.error("Invalid token format. Token must match the pattern '<region_id>:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'.")
+        sys.exit(1)
+
     # Validate and normalize the target directory
     if not os.path.isdir(target_directory):
-        print(f"Error: The target directory '{target_directory}' does not exist.", file=sys.stderr)
+        logging.error(f"The target directory '{target_directory}' does not exist.")
         sys.exit(1)
 
     # Ensure the target directory is writable
     if not os.access(target_directory, os.W_OK):
-        print(f"Error: The target directory '{target_directory}' is not writable.", file=sys.stderr)
+        logging.error(f"The target directory '{target_directory}' is not writable.")
         sys.exit(1)
 
     msi_path = os.path.join(target_directory, "agentInstaller.msi")
 
     try:
-        print("Downloading MSI installer...")
+        logging.info("Downloading MSI installer...")
         download_file(url, msi_path)
-        print("Download complete.")
+        logging.info("Download complete.")
 
-        print("Installing MSI installer...")
+        logging.info("Installing MSI installer...")
         install_msi(msi_path, target_directory, token)
-        print("Installation complete.")
+        logging.info("Installation complete.")
     except (requests.RequestException, subprocess.CalledProcessError, OSError) as e:
-        print(f"An error occurred: {e}", file=sys.stderr)
+        logging.error(f"An error occurred: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
