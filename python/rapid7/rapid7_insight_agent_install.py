@@ -5,6 +5,17 @@ import sys
 import requests
 
 def download_file(url, target_path):
+    """
+    Downloads a file from the specified URL and saves it to the target path.
+
+    Args:
+        url (str): The URL of the file to download.
+        target_path (str): The local file path where the downloaded file will be saved.
+
+    Raises:
+        requests.exceptions.RequestException: If there is an issue with the HTTP request.
+        IOError: If there is an issue writing the file to the target path.
+    """
     response = requests.get(url, stream=True, timeout=60)
     response.raise_for_status()
     with open(target_path, 'wb') as file:
@@ -12,6 +23,17 @@ def download_file(url, target_path):
             file.write(chunk)
 
 def install_msi(msi_path, target_directory, token):
+    """
+    Installs an MSI package using the Windows Installer (msiexec) command.
+
+    Args:
+        msi_path (str): The file path to the MSI package to be installed.
+        target_directory (str): The directory where the custom configuration will be stored.
+        token (str): The custom token required for the installation.
+
+    Raises:
+        subprocess.CalledProcessError: If the msiexec command fails.
+    """
     command = [
         "msiexec", "/i", msi_path,
         "/l*v", "insight_agent_install_log.log",
