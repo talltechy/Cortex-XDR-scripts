@@ -47,8 +47,8 @@ import logging
 import re
 import requests
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configure logging to suppress output
+logging.basicConfig(level=logging.CRITICAL, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def download_file(url, target_path):
     """
@@ -92,7 +92,7 @@ def install_msi(msi_path, target_directory, token):
         "/l*v", "insight_agent_install_log.log",
         f"CUSTOMCONFIGPATH={target_directory}",
         f"CUSTOMTOKEN={token}",
-        "/quiet"
+        "/quiet", "/qn"  # Ensure quiet mode
     ]
     try:
         subprocess.run(command, check=True)
