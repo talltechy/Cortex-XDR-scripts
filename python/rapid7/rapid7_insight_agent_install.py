@@ -27,6 +27,7 @@ Dependencies:
     - argparse: To parse command-line arguments.
     - os: To handle file and directory operations.
     - sys: To handle system-specific parameters and functions.
+    - logging: To handle logging.
 
 Raises:
     requests.exceptions.RequestException: If there is an issue with the HTTP request.
